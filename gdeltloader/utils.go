@@ -7,11 +7,13 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
+	"go.mongodb.org/mongo-driver/x/bsonx/bsoncore"
 )
 
-// Unzip decompresses a zip file src to a destination directory dest.
+// unzip decompresses a zip file src to a destination directory dest.
 // Stolen from https://stackoverflow.com/questions/20357223/easy-way-to-unzip-file-with-golang.
-func Unzip(src, dest string) error {
+func unzip(src, dest string) error {
 	r, err := zip.OpenReader(src)
 	if err != nil {
 		return err
@@ -72,5 +74,40 @@ func Unzip(src, dest string) error {
 		}
 	}
 
+	return nil
+}
+
+// removeContents removes all contents in a given directory.
+// Stolen from https://stackoverflow.com/questions/33450980/how-to-remove-all-contents-of-a-directory-using-golang.
+func removeContents(dir string) error {
+	d, err := os.Open(dir)
+	if err != nil {
+		return err
+	}
+	defer d.Close()
+	names, err := d.Readdirnames(-1)
+	if err != nil {
+		return err
+	}
+	for _, name := range names {
+		err = os.RemoveAll(filepath.Join(dir, name))
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// createDateTimeElement converts a string in YYYYMMDDHHMMSS format to int64 format.
+func createDateTimeElement(date string) int64 {
+	return 0
+}
+
+// createGeoElement converts a latitude and longitude into
+// {
+// 	"type": "point",
+// 	"coordinates": [long, lat],
+// }
+func createGeoElement(lat, long []byte) bsoncore.Document {
 	return nil
 }
