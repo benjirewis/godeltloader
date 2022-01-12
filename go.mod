@@ -1,4 +1,4 @@
-module gdeltloader/gdeltloader
+module github.com/benjirewis/godeltloader
 
 go 1.15
 
